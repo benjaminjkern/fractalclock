@@ -177,7 +177,7 @@ const handleButtons = () => {
             chatOpenButton.innerHTML = "&gt;";
             document.getElementById("chat").style.height = canvas.height + "px";
             document.getElementById('chat').style.opacity = "1";
-            document.getElementById('text').focus();
+            if (!window.phoneScreen) document.getElementById('text').focus();
         } else {
             chatOpenButton.style.right = "0";
             chatOpenButton.innerHTML = "&lt;";

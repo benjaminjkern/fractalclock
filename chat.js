@@ -160,7 +160,7 @@ const handleButtons = () => {
 
     const mouseEvent = () => {
         timeSinceMove = new Date().getTime();
-        if (!window.chatOpen || !window.phoneScreen) chatOpenButton.style.opacity = "1";
+        if (!window.chatOpen || window.phoneScreen) chatOpenButton.style.opacity = "1";
         setTimeout(() => {
             if (new Date().getTime() - timeSinceMove > wait && chatOpenButton.style.backgroundColor === "rgba(0, 0, 0, 0.2)" && !window.chatOpen && !window.phoneScreen) {
                 chatOpenButton.style.opacity = "0";

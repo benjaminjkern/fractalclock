@@ -23,6 +23,7 @@ $(document).ready(function() {
 
     window.phoneScreen = canvas.height > canvas.width;
     document.getElementById("chat").style.width = window.phoneScreen ? "100%" : "20%";
+    document.getElementById("chat").style.height = canvas.height + "px";
     document.body.style.fontSize = window.phoneScreen ? "24px" : "12px";
 
     window.onresize = function() {
@@ -30,6 +31,7 @@ $(document).ready(function() {
         canvas.height = window.innerHeight;
         window.phoneScreen = canvas.height > canvas.width;
         document.body.style.fontSize = window.phoneScreen ? "24px" : "12px";
+        document.getElementById("chat").style.height = canvas.height + "px";
         document.getElementById("chat").style.width = window.phoneScreen ? "100%" : "20%";
         if (window.chatOpen) {
             document.getElementById('openChat').style.opacity = window.phoneScreen ? "0" : "1";

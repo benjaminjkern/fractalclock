@@ -1,10 +1,20 @@
 const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const cors = require('cors');
 const app = express();
 const port = 8192;
 
-app.use(cors());
 
+const key = fs.readFileSync(__dirname + '/../certs/selfsigned.key');
+const cert = fs.readFileSync(__dirname + '/../certs/selfsigned.crt');
+const options = {
+    key,
+    cert
+};
+
+
+app.use(cors());
 app.use(express.json());
 
 
@@ -31,8 +41,6 @@ app.get('/', (req, res) => {
     });
 });
 
-app.listen(port, () => {
-    console.log(`Listening at http://localhost:${port}`);
-})
-
-module.exports = app;
+https.createServer(options, app).listen(port, () => {
+    console.log("Server listening on port: " + port)
+});

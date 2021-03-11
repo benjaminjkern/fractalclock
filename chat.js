@@ -1,13 +1,65 @@
 let chats = [];
 
-const defaultAccount = `<span style="color:darkgray"> (Anonymous) </span>`;
-const maxChat = 100;
+const anonymous = `<span style="color:darkgray"> (Anonymous) </span>`;
+
+const url = 'http://localhost:3000/';
 
 $(document).ready(function() {
-
     handleButtons();
-
+    receiveChats();
 });
+
+let hasNewPage = false;
+
+const receiveChats = () => {
+    let keepTrying = true;
+
+    let page = 1;
+    let newPage = false;
+
+    const chatBox = document.getElementById('chatBox');
+
+    const checkChats = () => {
+        // alert("Checking for chats");
+        fetch(url + '?page=' + page)
+            .then(response =>
+                response.json()
+            )
+            .then(data => {
+                chats = data.chats;
+                if (page > data.page) {
+                    page = data.page;
+                    hasNewPage = false;
+                } else if (newPage) {
+                    page++;
+                    newPage = false;
+                    hasNewPage = true;
+                }
+                drawChat();
+            }).catch(() => {
+                keepTrying = false;
+            });
+        if (keepTrying) setTimeout(checkChats, 1000);
+    };
+
+    chatBox.onscroll = function() {
+        console.log(chatBox.offsetHeight);
+        if (chatBox.scrollTop <= 0 && chatBox.scrollHeight > chatBox.offsetHeight) {
+            newPage = true;
+        }
+    }
+
+    checkChats();
+}
+
+let verified = 0;
+
+const diff = (A, B) => {
+    if (A.length === 0) return [];
+    if (B.length === 0) return A;
+    if (A[0].msg === B[0].msg) return diff(A.slice(1), B.slice(1));
+    return [A[0], ...diff(A.slice(1), B)];
+}
 
 let last = "";
 
@@ -39,27 +91,52 @@ const findAll = (message, string, i = 0) => {
     return findAll(message.slice(1), string, i + 1);
 }
 
-const sendChat = (account, message) => {
+const sendChat = (user, message) => {
     if (message.length > 0) {
         if (chatRegex.test(message) || emoji.test(message)) {
-            chats.push(`${account} > <span style="color:lightgray;">${replaceSpecials(message)}</span>`);
-            if (chats.length > maxChat) chats = chats.slice(maxChat);
+            const newChat = {};
+            if (user) newChat.user = user;
+            newChat.msg = message;
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newChat)
+            });
+            chats.push(newChat);
 
-            drawChat();
+            // drawChat();
+
+            last = document.getElementById('text').value;
+            document.getElementById('text').value = '';
+            const chatBox = document.getElementById('text');
+            chatBox.scrollTop = chatBox.scrollHeight - chatBox.offsetHeight;
+            receiveChats();
         } else {
             alert("Chats can only contain alphanumeric characters and spaces! Sorry!");
         }
-
-        last = document.getElementById('text').value;
-        document.getElementById('text').value = '';
     }
 }
 
+let oldHeight = 0;
+
 const drawChat = () => {
+    if (chats.length === 0) return;
     const chatBox = document.getElementById('chatBox');
-    const isAtBottom = chatBox.scrollTop === (chatBox.scrollHeight - chatBox.offsetHeight)
-    chatBox.innerHTML = chats.map(chat => `<div style="padding-left: 1.5em;text-indent:-1.5em; padding-bottom: 0.5em;" class="message">${chat}</div>`).join("");
-    if (isAtBottom) chatBox.scrollTop = chatBox.scrollHeight - chatBox.offsetHeight;
+
+    const isAtBottom = chatBox.scrollTop === (chatBox.scrollHeight - chatBox.offsetHeight);
+    chatBox.innerHTML = chats.map(({ user, msg }) => `<div style="padding-left: 1.5em;text-indent:-1.5em; padding-bottom: 0.5em;" class="message">${user || anonymous} > <span style="color:lightgray;">${replaceSpecials(msg)}</span></div>`).join("");
+
+    if (hasNewPage) {
+        // alert('newpage');
+
+        oldHeight = chatBox.scrollHeight;
+        setTimeout(() => {
+            chatBox.scrollTop += chatBox.scrollHeight - oldHeight - 100;
+        }, 1000);
+        hasNewPage = false;
+    } else if (isAtBottom) chatBox.scrollTop = chatBox.scrollHeight - chatBox.offsetHeight;
 }
 
 const handleButtons = () => {
@@ -79,7 +156,7 @@ const handleButtons = () => {
     }
     closeButton.onmouseup = function() {
         closeButton.style.backgroundColor = "#bb000077";
-        setChatState(false);
+        if (closeButton.style.opacity === '1') setChatState(false);
     }
 
     const sendButton = document.getElementById('send');
@@ -95,12 +172,12 @@ const handleButtons = () => {
     }
     sendButton.onmouseup = function() {
         sendButton.style.backgroundColor = "#bbbbbb";
-        sendChat(defaultAccount, document.getElementById('text').value);
+        sendChat(undefined, document.getElementById('text').value);
     }
 
     window.onkeydown = function(e) {
         if (e.key === 'Enter' && window.chatOpen && document.getElementById('text') == document.activeElement) {
-            sendChat(defaultAccount, document.getElementById('text').value);
+            sendChat(undefined, document.getElementById('text').value);
             sendButton.style.backgroundColor = "#999999";
         }
         if (e.key === 'ArrowLeft' && window.chatOpen && document.getElementById('text').selectionStart === 0) {
@@ -147,7 +224,7 @@ const handleButtons = () => {
     window.onmousemove = function(e) {
         mouseEvent();
 
-        if (e.x < canvas.width / 4 && e.y < canvas.height / 4 && (!window.chatOpen || !window.phoneScreen)) {
+        if (e.x < canvas.width / 4 && e.y < canvas.height / 2 && (!window.chatOpen || !window.phoneScreen)) {
             document.getElementById('controls').style.opacity = "1";
         } else {
             document.getElementById('controls').style.opacity = "0";
@@ -173,7 +250,7 @@ const handleButtons = () => {
         if (state) {
             document.getElementById("closeChat").style.opacity = window.phoneScreen ? "1" : "0";
             chatOpenButton.style.opacity = window.phoneScreen ? "0" : "1";
-            chatOpenButton.style.right = "20%";
+            chatOpenButton.style.right = window.phoneScreen ? "100%" : "20%";
             chatOpenButton.innerHTML = "&gt;";
             document.getElementById("chat").style.height = canvas.height + "px";
             document.getElementById('chat').style.opacity = "1";

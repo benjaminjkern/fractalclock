@@ -38,16 +38,22 @@
 <body style="margin: 0px; overflow: hidden; font-family:Arial, Helvetica, sans-serif; color: white;">
     <div id="controls" style="opacity: 0">
         <p style="position: absolute; left: 0%; top: 2%; text-align:center; width: 5%;">Iterations</p>
-        <input type="range" id="slider" min="1" max="18" value="11" style="position: absolute; left: 5%; top: 5%; foreground-color: red" class="slider">
+        <input type="range" id="slider" min="1" max="18" value="7" style="position: absolute; left: 5%; top: 5%; foreground-color: red" class="slider">
 
         <p style="position: absolute; left: 0%; top: 7%; text-align:center; width: 5%;">Blur</p>
-        <input type="range" id="blurslider" min="0" max="255" value="235" style="position: absolute; left: 5%; top: 10%;" class="slider">
+        <input type="range" id="blurslider" min="0" max="255" value="220" style="position: absolute; left: 5%; top: 10%;" class="slider">
 
         <p style="position: absolute; left: 0%; top: 12%; text-align:center; width: 5%;">Glow</p>
         <input type="range" id="glowslider" min="0" max="100" value="10" style="position: absolute; left: 5%; top: 15%;" class="slider">
 
-        <p style="position: absolute; left: 0%; top: 17%; text-align:center; width: 5%;">Ratio</p>
-        <input type="range" id="rslider" min="0" max="100" value="66" style="position: absolute; left: 5%; top: 20%;" class="slider">
+        <p style="position: absolute; left: 0%; top: 17%; text-align:center; width: 5%;">Second Hand</p>
+        <input type="range" id="sslider" min="0" max="100" value="66" style="position: absolute; left: 5%; top: 20%;" class="slider">
+
+        <p style="position: absolute; left: 0%; top: 22%; text-align:center; width: 5%;">Minute Hand</p>
+        <input type="range" id="mslider" min="0" max="100" value="60" style="position: absolute; left: 5%; top: 25%;" class="slider">
+
+        <p style="position: absolute; left: 0%; top: 27%; text-align:center; width: 5%;">Hour Hand</p>
+        <input type="range" id="hslider" min="0" max="100" value="50" style="position: absolute; left: 5%; top: 30%;" class="slider">
     </div>
 
 
@@ -56,7 +62,7 @@
             Chat
             <div id="closeChat" style="position: absolute; width: max(40px, 2em); height: max(40px, 2em); right: 0; top: 0; background-color:#ff000077; text-align:center; line-height: max(40px, 2em); user-select: none;">X</div>
         </div>
-        <div id="chatBox" style="overflow: scroll; height: calc(100% - max(120px, 6em)); width: calc(100% - max(20px, 1em)); position: absolute; top: max(40px, 2em); margin: max(10px, 0.5em);">
+        <div id="chatBox" style="overflow-y:scroll; overflow-x: hidden; height: calc(100% - max(110px, 5.5em)); width: calc(100% - max(20px, 1em)); position: absolute; top: max(50px, 2.5em); left: max(10px, 0.5em);">
             <div style="color:darkgrey; line-height: calc(100vh - max(120px, 6em)); text-align: center;">There are no chats!</div>
         </div>
         <div style="position: absolute; width: calc(100% - max(20px, 1em)); height: max(40px, 2em); bottom: max(10px, 0.5em); left: max(10px,0.5em); background-color: #00000033; border-radius: max(20px, 1em);">

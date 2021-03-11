@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = 3000;
+const port = 8192;
 
 app.use(cors());
 
@@ -11,9 +11,11 @@ app.use(express.json());
 const chats = [];
 const proper = /^[\w :]+$/;
 const PAGESIZE = 100;
+const MAXCHATLENGTH = 140;
+const MAXUSERLENGTH = 20;
 
 app.post('/', (req, res) => {
-    if (proper.test(req.body.msg) && proper.test(req.body.user)) {
+    if (proper.test(req.body.msg) && proper.test(req.body.user) && req.body.msg.length < MAXCHATLENGTH && (!req.body.user || req.body.user.length < MAXUSERLENGTH)) {
         const message = { time: new Date().getTime(), user: req.body.user, msg: req.body.msg };
         chats.push(message);
         // console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
@@ -32,3 +34,5 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}`);
 })
+
+module.exports = app;

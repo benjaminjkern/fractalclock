@@ -2,7 +2,7 @@ let chats = [];
 
 const anonymous = `<span style="color:darkgray"> (Anonymous) </span>`;
 
-const url = 'http://ec2-100-26-238-255.compute-1.amazonaws.com:8192/';
+const url = 'https://ec2-100-26-238-255.compute-1.amazonaws.com:8192/';
 
 const maxChatLength = 140;
 

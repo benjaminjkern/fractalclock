@@ -159,6 +159,9 @@ const handleButtons = () => {
         if (closeButton.style.opacity === '1') setChatState(false);
     }
 
+    closeButton.ontouchstart = closeButton.onmousedown;
+    closeButton.ontouchend = closeButton.onmouseup;
+
     const sendButton = document.getElementById('send');
 
     sendButton.onmouseover = function() {
@@ -174,6 +177,10 @@ const handleButtons = () => {
         sendButton.style.backgroundColor = "#bbbbbb";
         sendChat(undefined, document.getElementById('text').value);
     }
+
+
+    sendButton.ontouchstart = sendButton.onmousedown;
+    sendButton.ontouchend = sendButton.onmouseup;
 
     window.onkeydown = function(e) {
         if (e.key === 'Enter' && window.chatOpen && document.getElementById('text') == document.activeElement) {
@@ -214,6 +221,10 @@ const handleButtons = () => {
         chatOpenButton.style.backgroundColor = "#00000033";
         setChatState(!window.chatOpen);
     }
+
+
+    chatOpenButton.ontouchstart = chatOpenButton.onmousedown;
+    chatOpenButton.ontouchend = chatOpenButton.onmouseup;
 
     const wait = 1000;
 

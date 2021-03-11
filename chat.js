@@ -2,7 +2,9 @@ let chats = [];
 
 const anonymous = `<span style="color:darkgray"> (Anonymous) </span>`;
 
-const url = 'http://localhost:3000/';
+const url = 'http://ec2-100-26-238-255.compute-1.amazonaws.com:8192/';
+
+const maxChatLength = 140;
 
 $(document).ready(function() {
     handleButtons();
@@ -48,6 +50,7 @@ const receiveChats = () => {
             newPage = true;
         }
     }
+    setTimeout(() => chatBox.scrollTop = chatBox.scrollHeight - chatBox.offsetHeight, 1000);
 
     checkChats();
 }
@@ -93,6 +96,10 @@ const findAll = (message, string, i = 0) => {
 
 const sendChat = (user, message) => {
     if (message.length > 0) {
+        if (message.length > maxChatLength) {
+            alert("Chats must be less than " + maxChatLength + " characters long!");
+            return;
+        }
         if (chatRegex.test(message) || emoji.test(message)) {
             const newChat = {};
             if (user) newChat.user = user;
@@ -111,7 +118,7 @@ const sendChat = (user, message) => {
             last = document.getElementById('text').value;
             document.getElementById('text').value = '';
             const chatBox = document.getElementById('text');
-            chatBox.scrollTop = chatBox.scrollHeight - chatBox.offsetHeight;
+            setTimeout(() => chatBox.scrollTop = chatBox.scrollHeight - chatBox.offsetHeight, 500);
             receiveChats();
         } else {
             alert("Chats can only contain alphanumeric characters and spaces! Sorry!");
@@ -125,10 +132,11 @@ const drawChat = () => {
     if (chats.length === 0) return;
     const chatBox = document.getElementById('chatBox');
 
-    const isAtBottom = chatBox.scrollTop === (chatBox.scrollHeight - chatBox.offsetHeight);
+    const isAtBottom = chatBox.scrollTop >= chatBox.scrollHeight - chatBox.offsetHeight;
     chatBox.innerHTML = chats.map(({ user, msg }) => `<div style="padding-left: 1.5em;text-indent:-1.5em; padding-bottom: 0.5em;" class="message">${user || anonymous} > <span style="color:lightgray;">${replaceSpecials(msg)}</span></div>`).join("");
 
-    if (hasNewPage) {
+    if (isAtBottom) chatBox.scrollTop = chatBox.scrollHeight - chatBox.offsetHeight;
+    else if (hasNewPage) {
         // alert('newpage');
 
         oldHeight = chatBox.scrollHeight;
@@ -136,7 +144,7 @@ const drawChat = () => {
             chatBox.scrollTop += chatBox.scrollHeight - oldHeight - 100;
         }, 1000);
         hasNewPage = false;
-    } else if (isAtBottom) chatBox.scrollTop = chatBox.scrollHeight - chatBox.offsetHeight;
+    }
 }
 
 const handleButtons = () => {

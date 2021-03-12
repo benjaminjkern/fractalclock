@@ -284,6 +284,7 @@ const handleButtons = () => {
             document.getElementById("chat").style.height = canvas.height + "px";
             document.getElementById('chat').style.opacity = "1";
             if (!window.phoneScreen) document.getElementById('text').focus();
+            else document.getElementById('chatBox').focus();
         } else {
             chatOpenButton.style.right = "0";
             chatOpenButton.innerHTML = "&lt;";

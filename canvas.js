@@ -8,6 +8,7 @@ let maxDepth;
 let blurr;
 let glow;
 let r;
+let scale;
 
 $(document).ready(function() {
 
@@ -67,6 +68,14 @@ $(document).ready(function() {
         var value = (this.value - this.min) / (this.max - this.min) * 100
         this.style.background = 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + value + '%, #fff ' + value + '%, white 100%)'
     }
+    var scaleslider = document.getElementById("scaleslider");
+
+    scale = scaleslider.value / 100;
+    scaleslider.oninput = function() {
+        scale = this.value / 100;
+        var value = (this.value - this.min) / (this.max - this.min) * 100
+        this.style.background = 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + value + '%, #fff ' + value + '%, white 100%)'
+    }
 
     var sslider = document.getElementById("sslider");
     var mslider = document.getElementById("mslider");
@@ -105,7 +114,7 @@ const drawTree = (ctx) => {
 
     const smallerSide = Math.min(canvas.height, canvas.width);
 
-    const startLength = r === 1 ? smallerSide / 2 / maxDepth : Math.min(smallerSide / 2, (smallerSide / 2 / r) * (1 - r) / (1 - r ** maxDepth));
+    const startLength = scale * (r === 1 ? smallerSide / 2 / maxDepth : Math.min(smallerSide / 2, (smallerSide / 2 / r) * (1 - r) / (1 - r ** maxDepth)));
 
     const start = [canvas.width / 2, canvas.height / 2 + startLength];
     const line0 = [0, -startLength];

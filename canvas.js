@@ -68,10 +68,10 @@ $(document).ready(function() {
         var value = (this.value - this.min) / (this.max - this.min) * 100
         this.style.background = 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + value + '%, #fff ' + value + '%, white 100%)'
     }
-    var scaleslider = document.getElementById("scaleslider");
+    var scaledslider = document.getElementById("scaledslider");
 
-    scale = scaleslider.value / 100;
-    scaleslider.oninput = function() {
+    scale = scaledslider.value / 100;
+    scaledslider.oninput = function() {
         scale = this.value / 100;
         var value = (this.value - this.min) / (this.max - this.min) * 100
         this.style.background = 'linear-gradient(to right, #82CFD0 0%, #82CFD0 ' + value + '%, #fff ' + value + '%, white 100%)'

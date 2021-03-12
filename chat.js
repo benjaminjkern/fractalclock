@@ -115,7 +115,7 @@ const sendChat = (user, message) => {
         }
         const newChat = {};
         if (user) newChat.user = user;
-        newChat.msg = message.replace("<", "&lt;");
+        newChat.msg = message.replace(/</g, "&lt;");
         fetch(url, {
             method: 'POST',
             headers: {

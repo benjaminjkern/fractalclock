@@ -14,7 +14,7 @@ app.use((req, res, next) => {
     next();
 })
 
-const proper = /^[\w :]+$/;
+const proper = /^[^<]+$/;
 const PAGESIZE = 100;
 const MAXCHATLENGTH = 140;
 const MAXUSERLENGTH = 20;

@@ -16,6 +16,7 @@ const specials = {
     "herb": `<span style="color: red">chad</span>`,
     "andrew": `<span style="color: red">chad</span>`,
     ":dylan:": `<img src="https://scontent-lax3-2.xx.fbcdn.net/v/t1.0-9/75210243_1243279292520620_5463909299203866624_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=h4MWimG9Q4wAX99hesq&_nc_ht=scontent-lax3-2.xx&oh=8704ce2e41825818bc5346d14897ad73&oe=606F98E7" class="chatImage"/>`,
+    "wally": `<span style="color: blue; text-shadow: 5px 5px white;">thad</span>`,
 }
 
 const url = 'https://4r52fybt27.execute-api.us-east-1.amazonaws.com/dev/';

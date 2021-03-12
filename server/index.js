@@ -37,7 +37,7 @@ app.get('/', async(req, res) => {
         page: Math.min(page, Math.ceil(chats.length / PAGESIZE))
     });
 
-    chats = await databaseCalls.allChats();
+    chats = (await databaseCalls.allChats()).sort((a, b) => a.time - b.time);
 });
 
 // const port = 8192

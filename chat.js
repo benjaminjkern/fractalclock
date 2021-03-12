@@ -113,7 +113,7 @@ const sendChat = (user, message) => {
             });
             chats.push(newChat);
 
-            // drawChat();
+            drawChat();
 
             last = document.getElementById('text').value;
             document.getElementById('text').value = '';

@@ -2,9 +2,23 @@ let chats = [];
 
 const anonymous = `<span style="color:darkgray"> (Anonymous) </span>`;
 
-const url = 'https://4r52fybt27.execute-api.us-east-1.amazonaws.com/dev/';
+const specials = {
+    ":coffee:": `<img src="https://upload.wikimedia.org/wikipedia/commons/4/45/A_small_cup_of_coffee.JPG" class="chatImage"/>`,
+    "crowdventure": `<a href="http://crowdventure.me/">crowdventure</a>`,
+    ":love:": `<img src="https://www.eharmony.co.uk/dating-advice/wp-content/uploads/2018/04/whatislove-960x640.jpg" class="chatImage"/>`,
+    "josh": `<span style="color: red">chad<span>`,
+    "ben": `<span style="color: red">chad<span>`,
+    "dom": `<span style="color: red">chad<span>`,
+    "evan": `<span style="color: red">chad<span>`,
+    "soph": `<span style="color: red">chad<span>`,
+    "diego": `<span style="color: red">chad<span>`,
+    "marissa": `<span style="color: red">chad<span>`,
+    ":dylan:": `<img src="https://scontent-lax3-2.xx.fbcdn.net/v/t1.0-9/75210243_1243279292520620_5463909299203866624_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=h4MWimG9Q4wAX99hesq&_nc_ht=scontent-lax3-2.xx&oh=8704ce2e41825818bc5346d14897ad73&oe=606F98E7" class="chatImage"/>`,
+}
 
+const url = 'https://4r52fybt27.execute-api.us-east-1.amazonaws.com/dev/';
 const maxChatLength = 140;
+const maxUserLength = 20;
 
 $(document).ready(function() {
     handleButtons();
@@ -70,9 +84,6 @@ const emoji = /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud0
 
 const chatRegex = /^[\w :]+$/;
 
-const specials = {
-    ":coffee:": `<img src="https://upload.wikimedia.org/wikipedia/commons/4/45/A_small_cup_of_coffee.JPG" class="chatImage"/>`
-}
 
 const replaceSpecials = (message) => {
     const replaceSet = {};
@@ -90,7 +101,7 @@ const replaceSpecials = (message) => {
 
 const findAll = (message, string, i = 0) => {
     if (string.length > message.length) return [];
-    if (message.slice(0, string.length) === string) return [i, ...findAll(message.slice(string.length), string, i + string.length)];
+    if (message.slice(0, string.length).toLowerCase() === string.toLowerCase()) return [i, ...findAll(message.slice(string.length), string, i + string.length)];
     return findAll(message.slice(1), string, i + 1);
 }
 

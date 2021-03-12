@@ -6,13 +6,15 @@ const specials = {
     ":coffee:": `<img src="https://upload.wikimedia.org/wikipedia/commons/4/45/A_small_cup_of_coffee.JPG" class="chatImage"/>`,
     "crowdventure": `<a href="http://crowdventure.me/">crowdventure</a>`,
     ":love:": `<img src="https://www.eharmony.co.uk/dating-advice/wp-content/uploads/2018/04/whatislove-960x640.jpg" class="chatImage"/>`,
-    "josh": `<span style="color: red">chad<span>`,
-    "ben": `<span style="color: red">chad<span>`,
-    "dom": `<span style="color: red">chad<span>`,
-    "evan": `<span style="color: red">chad<span>`,
-    "soph": `<span style="color: red">chad<span>`,
-    "diego": `<span style="color: red">chad<span>`,
-    "marissa": `<span style="color: red">chad<span>`,
+    "josh": `<span style="color: red">chad</span>`,
+    "ben": `<span style="color: red">chad</span>`,
+    "dom": `<span style="color: red">chad</span>`,
+    "evan": `<span style="color: red">chad</span>`,
+    "soph": `<span style="color: red">chad</span>`,
+    "diego": `<span style="color: red">chad</span>`,
+    "marissa": `<span style="color: red">chad</span>`,
+    "herb": `<span style="color: red">chad</span>`,
+    "andrew": `<span style="color: red">chad</span>`,
     ":dylan:": `<img src="https://scontent-lax3-2.xx.fbcdn.net/v/t1.0-9/75210243_1243279292520620_5463909299203866624_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=h4MWimG9Q4wAX99hesq&_nc_ht=scontent-lax3-2.xx&oh=8704ce2e41825818bc5346d14897ad73&oe=606F98E7" class="chatImage"/>`,
 }
 
@@ -111,29 +113,25 @@ const sendChat = (user, message) => {
             alert("Chats must be less than " + maxChatLength + " characters long!");
             return;
         }
-        if (chatRegex.test(message) || emoji.test(message)) {
-            const newChat = {};
-            if (user) newChat.user = user;
-            newChat.msg = message;
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newChat)
-            });
-            chats.push(newChat);
+        const newChat = {};
+        if (user) newChat.user = user;
+        newChat.msg = message.replace("<", "&lt;");
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newChat)
+        });
+        chats.push(newChat);
 
-            drawChat();
+        drawChat();
 
-            last = document.getElementById('text').value;
-            document.getElementById('text').value = '';
-            const chatBox = document.getElementById('text');
-            setTimeout(() => chatBox.scrollTop = chatBox.scrollHeight - chatBox.offsetHeight, 500);
-            receiveChats();
-        } else {
-            alert("Chats can only contain alphanumeric characters and spaces! Sorry!");
-        }
+        last = document.getElementById('text').value;
+        document.getElementById('text').value = '';
+        const chatBox = document.getElementById('text');
+        setTimeout(() => chatBox.scrollTop = chatBox.scrollHeight - chatBox.offsetHeight, 500);
+        receiveChats();
     }
 }
 

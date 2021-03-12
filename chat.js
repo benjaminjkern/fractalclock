@@ -2,7 +2,7 @@ let chats = [];
 
 const anonymous = `<span style="color:darkgray"> (Anonymous) </span>`;
 
-const url = 'https://er5he4h1wl.execute-api.us-east-1.amazonaws.com/dev/';
+const url = 'https://4r52fybt27.execute-api.us-east-1.amazonaws.com/dev/';
 
 const maxChatLength = 140;
 

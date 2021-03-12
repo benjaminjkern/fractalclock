@@ -1,22 +1,10 @@
 const express = require('express');
-const https = require('https');
-const fs = require('fs');
+const serverless = require('serverless-http');
 const cors = require('cors');
 const app = express();
-const port = 8192;
 
-
-const key = fs.readFileSync(__dirname + '/../certs/selfsigned.key');
-const cert = fs.readFileSync(__dirname + '/../certs/selfsigned.crt');
-const options = {
-    key,
-    cert
-};
-
-
-app.use(cors());
 app.use(express.json());
-
+app.use(cors());
 
 const chats = [];
 const proper = /^[\w :]+$/;
@@ -41,6 +29,8 @@ app.get('/', (req, res) => {
     });
 });
 
-https.createServer(options, app).listen(port, () => {
-    console.log("Server listening on port: " + port)
-});
+// app.listen(port, () => {
+//     console.log("Server listening on port: " + port);
+// });
+
+module.exports.handler = serverless(app);

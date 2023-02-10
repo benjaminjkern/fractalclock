@@ -61,10 +61,10 @@ const receiveChats = () => {
                 keepTrying = false;
             });
         if (keepTrying) setTimeout(checkChats, 1000);
+        else setTimeout(checkChats, 10000);
     };
 
     chatBox.onscroll = function() {
-        console.log(chatBox.offsetHeight);
         if (chatBox.scrollTop <= 0 && chatBox.scrollHeight > chatBox.offsetHeight) {
             newPage = true;
         }

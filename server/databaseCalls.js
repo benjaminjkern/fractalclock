@@ -35,21 +35,6 @@ const getFullTable = async (tableName, lastEvaluatedKey) => {
         : [];
 };
 
-const getItem = async (tableName, key) =>
-    DBON
-        ? await docClient
-              .get({
-                  TableName: tableName,
-                  Key: key,
-              })
-              .promise()
-              .then((data) => data.Item)
-              .catch((err) => {
-                  console.log(err);
-                  return err;
-              })
-        : undefined;
-
 const addItem = async (tableName, item) =>
     await docClient
         .put({ TableName: tableName, Item: item })
@@ -69,26 +54,5 @@ const removeItem = async (tableName, key) =>
             console.log(err);
             return err;
         });
-
-const filter = async (tableName, arg, value) =>
-    DBON
-        ? await docClient
-              .scan({
-                  TableName: tableName,
-                  ExpressionAttributeValues: {
-                      ":r": value,
-                  },
-                  ExpressionAttributeNames: {
-                      "#a": arg,
-                  },
-                  FilterExpression: `#a = :r`,
-              })
-              .promise()
-              .then((data) => data.Items)
-              .catch((err) => {
-                  console.log(err);
-                  return err;
-              })
-        : [];
 
 module.exports = databaseCalls;

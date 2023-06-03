@@ -1,22 +1,23 @@
 import React, { useContext } from "react";
 import { CONTROLS, FractalSettingsContext } from "./FractalSettings";
-import { useMouseHover, useWindowSize } from "./utils/hooks";
+import { useWindowSize } from "./utils/hooks";
 
 const FractalControls = () => {
     const { settingsInputValues, setSettingsInputValues } = useContext(
         FractalSettingsContext
     );
-    const { hover: showingControls, hoverElementProps } = useMouseHover();
+    // const { hover: showingControls, hoverElementProps } = useMouseHover();
+    const showingControls = true,
+        hoverElementProps = {};
     const { width: windowWidth, height: windowHeight } = useWindowSize();
 
     const getSettingsValue = ({ key, listKey, listIndex }) => {
         if (key) return settingsInputValues[key];
-        console.log(listKey, listIndex);
         return settingsInputValues[listKey][listIndex];
     };
     const setSettingsValue = ({ key, listKey, listIndex }, value) => {
         if (key)
-            setSettingsInputValues((settings) => ({
+            return setSettingsInputValues((settings) => ({
                 ...settings,
                 [key]: +value,
             }));
@@ -47,7 +48,7 @@ const FractalControls = () => {
                 const hueValue =
                     ((getSettingsValue(control) - min) / (max - min)) * 100;
                 return (
-                    <>
+                    <span key={i}>
                         <p
                             style={{
                                 position: "absolute",
@@ -82,7 +83,7 @@ const FractalControls = () => {
                                 appearance: "none",
                             }}
                         />
-                    </>
+                    </span>
                 );
             })}
         </div>

@@ -3,7 +3,7 @@ import React, { createContext, useState } from "react";
 export const FractalSettingsContext = createContext();
 
 export const CONTROLS = [
-    { name: "Iterations", min: 1, max: 18, defaultValue: 9, key: "maxDepth" },
+    { name: "Iterations", min: 1, max: 18, defaultValue: 8, key: "maxDepth" },
     {
         name: "Blur",
         min: 0,
@@ -50,24 +50,33 @@ export const CONTROLS = [
     },
 ];
 
-const FractalSettingsProvider = ({ children }) => {
-    const startInputValues = {};
-    for (const { key, listKey, listIndex, defaultValue } of CONTROLS) {
-        if (key) startInputValues[key] = defaultValue;
-        if (!startInputValues[listKey]) startInputValues[listKey] = [];
-        startInputValues[listKey][listIndex] = defaultValue;
+const DEFAULT_INPUT_VALUES = {};
+
+for (const { key, listKey, listIndex, defaultValue } of CONTROLS) {
+    if (key) {
+        DEFAULT_INPUT_VALUES[key] = defaultValue;
+        continue;
     }
+    if (!DEFAULT_INPUT_VALUES[listKey]) DEFAULT_INPUT_VALUES[listKey] = [];
+    DEFAULT_INPUT_VALUES[listKey][listIndex] = defaultValue;
+}
+
+const FractalSettingsProvider = ({ children }) => {
     const [settingsInputValues, setSettingsInputValues] =
-        useState(startInputValues);
+        useState(DEFAULT_INPUT_VALUES);
 
     const settings = {};
     for (const { key, listKey, listIndex, getValue = (x) => x } of CONTROLS) {
-        if (key) settings[key] = getValue(settingsInputValues[key]);
+        if (key) {
+            settings[key] = getValue(settingsInputValues[key]);
+            continue;
+        }
         if (!settings[listKey]) settings[listKey] = [];
         settings[listKey][listIndex] = getValue(
             settingsInputValues[listKey][listIndex]
         );
     }
+
     return (
         <FractalSettingsContext.Provider
             value={{ settings, settingsInputValues, setSettingsInputValues }}

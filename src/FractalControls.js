@@ -1,14 +1,12 @@
 import React, { useContext } from "react";
 import { CONTROLS, FractalSettingsContext } from "./FractalSettings";
-import { useWindowSize } from "./utils/hooks";
+import { useMouseHover, useWindowSize } from "./utils/hooks";
 
 const FractalControls = () => {
     const { settingsInputValues, setSettingsInputValues } = useContext(
         FractalSettingsContext
     );
-    // const { hover: showingControls, hoverElementProps } = useMouseHover();
-    const showingControls = true,
-        hoverElementProps = {};
+    const { hover: showingControls, hoverElementProps } = useMouseHover();
     const { width: windowWidth, height: windowHeight } = useWindowSize();
 
     const getSettingsValue = ({ key, listKey, listIndex }) => {

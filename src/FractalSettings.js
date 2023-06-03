@@ -83,7 +83,6 @@ const FractalSettingsProvider = ({ children }) => {
             settingsInputValues[listKey][listIndex]
         );
     }
-
     return (
         <FractalSettingsContext.Provider
             value={{ settings, settingsInputValues, setSettingsInputValues }}

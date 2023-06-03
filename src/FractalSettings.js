@@ -57,6 +57,8 @@ export const CONTROLS = [
     },
 ];
 
+// Generate this outside of the function
+
 const DEFAULT_INPUT_VALUES = {};
 
 for (const { key, listKey, listIndex, defaultValue } of CONTROLS) {

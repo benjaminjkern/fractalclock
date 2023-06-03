@@ -10,7 +10,7 @@ import FractalSettingsProvider from "./FractalSettings";
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <FractalSettingsProvider>
-            {/* <FractalControls /> */}
+            <FractalControls />
             <FractalCanvas />
         </FractalSettingsProvider>
         {/* <Chat /> */}

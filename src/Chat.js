@@ -372,20 +372,6 @@ export default Chat;
 //         mouseEvent();
 //     };
 
-//     window.onmousemove = function (e) {
-//         mouseEvent();
-
-//         if (
-//             e.x < canvas.width / 4 &&
-//             e.y < canvas.height / 2 &&
-//             (!window.chatOpen || !window.phoneScreen)
-//         ) {
-//             document.getElementById("controls").style.opacity = "1";
-//         } else {
-//             document.getElementById("controls").style.opacity = "0";
-//         }
-//     };
-
 //     window.onmouseout = function (e) {
 //         if (
 //             !window.chatOpen &&

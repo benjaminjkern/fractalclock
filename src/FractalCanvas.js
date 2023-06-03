@@ -123,7 +123,7 @@ const FractalCanvas = () => {
     useEffect(() => {
         setDrawLoop(setInterval(draw, 50));
         return () => clearInterval(drawLoop);
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <canvas

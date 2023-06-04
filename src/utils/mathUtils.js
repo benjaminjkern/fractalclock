@@ -69,3 +69,13 @@ export const scaleToHex = (scale) =>
     Math.floor(scale * 255)
         .toString(16)
         .padStart(2, "0");
+
+export const getNowSeconds = () => {
+    const now = new Date();
+    return (
+        now.getMilliseconds() / 1000 +
+        now.getSeconds() +
+        now.getMinutes() * 60 +
+        now.getHours() * 60 * 60
+    );
+};

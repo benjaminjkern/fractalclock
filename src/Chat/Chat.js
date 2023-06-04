@@ -107,7 +107,8 @@ const Chat = () => {
                     style={{
                         color: "darkgrey",
                         textAlign: "center",
-                        justifyContent: "center",
+                        justifyContent: chats?.length ? "start" : "center",
+                        minHeight: "100%",
                     }}
                 >
                     {!chats

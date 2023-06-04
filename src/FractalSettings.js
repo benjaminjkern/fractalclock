@@ -1,9 +1,12 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
+import { useWindowSize } from "./utils/hooks";
+import { HSVtoHEX, getNowSeconds } from "./utils/mathUtils";
 
 export const FractalSettingsContext = createContext();
+export const ColorContext = createContext();
 
 export const CONTROLS = [
-    { name: "Iterations", min: 1, max: 18, defaultValue: 11, key: "maxDepth" },
+    { name: "Iterations", min: 1, max: 18, defaultValue: 10, key: "maxDepth" },
     {
         name: "Blur",
         min: 0,
@@ -89,8 +92,34 @@ const FractalSettingsProvider = ({ children }) => {
         <FractalSettingsContext.Provider
             value={{ settings, settingsInputValues, setSettingsInputValues }}
         >
-            {children}
+            <ColorContextProvider>{children}</ColorContextProvider>
         </FractalSettingsContext.Provider>
+    );
+};
+
+const getNowColors = () => {
+    const seconds = getNowSeconds();
+    return [
+        `#${HSVtoHEX(seconds / 60 / 60, 1, 0.8)}`,
+        `#${HSVtoHEX(seconds / 60 / 60 + 0.5, 1, 0.8)}`,
+    ];
+};
+
+const ColorContextProvider = ({ children }) => {
+    const { windowWidth, windowHeight } = useWindowSize();
+
+    const [colors, setNewColors] = useState(getNowColors());
+
+    // Refresh loop is done here as well
+    useEffect(() => {
+        const drawLoop = setInterval(() => setNewColors(getNowColors()), 1);
+        return () => clearInterval(drawLoop);
+    }, [windowHeight, windowWidth]);
+
+    return (
+        <ColorContext.Provider value={{ colors }}>
+            {children}
+        </ColorContext.Provider>
     );
 };
 

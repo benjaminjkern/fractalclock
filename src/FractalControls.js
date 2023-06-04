@@ -1,13 +1,16 @@
 import React, { useContext } from "react";
-import { CONTROLS, FractalSettingsContext } from "./FractalSettings";
-import { useMouseHover, useWindowSize } from "./utils/hooks";
+import {
+    CONTROLS,
+    ColorContext,
+    FractalSettingsContext,
+} from "./FractalSettings";
+import { useMouseHover } from "./utils/hooks";
 
 const FractalControls = () => {
     const { settingsInputValues, setSettingsInputValues } = useContext(
         FractalSettingsContext
     );
     const { hover: showingControls, hoverElementProps } = useMouseHover();
-    const { windowWidth, windowHeight } = useWindowSize();
 
     const getSettingsValue = ({ key, listKey, listIndex }) => {
         if (key) return settingsInputValues[key];
@@ -29,6 +32,12 @@ const FractalControls = () => {
         });
     };
 
+    const { colors } = useContext(ColorContext);
+
+    const color = colors[1];
+    const radius = 3.5;
+    const width = 75;
+
     return (
         <div
             style={{
@@ -36,28 +45,40 @@ const FractalControls = () => {
                 position: "absolute",
                 top: 0,
                 left: 0,
-                width: windowWidth / 4,
-                height: windowHeight / 2,
+                padding: 10,
             }}
             {...hoverElementProps}
         >
+            <style>{`
+                .slider::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    width: ${radius * 2}px;
+                    height: ${radius * 2}px;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    background: ${color};
+                }
+            `}</style>
             {CONTROLS.map((control, i) => {
                 const { name, min, max } = control;
-                const hueValue =
-                    ((getSettingsValue(control) - min) / (max - min)) * 100;
+                const value =
+                    ((((getSettingsValue(control) - min) / (max - min)) *
+                        (width - 2 * radius) +
+                        radius) /
+                        width) *
+                    100;
+
                 return (
-                    <span key={i}>
-                        <p
-                            style={{
-                                position: "absolute",
-                                left: 0,
-                                top: `${2 + i * 5}%`,
-                                textAlign: "center",
-                                width: "5%",
-                            }}
-                        >
-                            {name}
-                        </p>
+                    <div
+                        key={i}
+                        style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        {name}
                         <input
                             type="range"
                             min={min}
@@ -66,22 +87,19 @@ const FractalControls = () => {
                             onChange={(e) =>
                                 setSettingsValue(control, e.target.value)
                             }
+                            className="slider"
                             style={{
-                                position: "absolute",
-                                left: "5%",
-                                top: `${(i + 1) * 5}%`,
-                                foregroundColor: "red",
-                                background: `linear-gradient(to right, #82CFD0 0%, #82CFD0 ${hueValue}%, #fff ${hueValue}%, white 100%)`,
-                                border: "solid 1px #82CFD0",
-                                borderRadius: 8,
-                                height: 7,
-                                width: 75,
+                                background: `linear-gradient(to right, ${color} ${value}%, #fff0 ${value}%)`,
+                                border: "none",
+                                borderRadius: 2 * radius,
+                                height: 2 * radius,
+                                width: width,
                                 outline: "none",
                                 WebkitAppearance: "none",
                                 appearance: "none",
                             }}
                         />
-                    </span>
+                    </div>
                 );
             })}
         </div>

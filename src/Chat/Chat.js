@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { findAll } from "./utils/stringUtils";
 import ChatOpenButton from "./Chat/ChatOpenButton";
 import ChatCloseButton from "./ChatCloseButton";
+import { ReactiveDiv } from "../utils/components";
 
 const ANONYMOUS = `<span style="color:darkgray"> (Anonymous) </span>`;
 
@@ -58,26 +59,11 @@ const Chat = () => {
     }
     */
 
+    const sendChat = () => {};
+
     // const handleButtons = () => {
 
     //     const sendButton = document.getElementById("send");
-
-    //     sendButton.onmouseover = function () {
-    //         sendButton.style.backgroundColor = "#bbbbbb";
-    //     };
-    //     sendButton.onmouseout = function () {
-    //         sendButton.style.backgroundColor = "#ffffff";
-    //     };
-    //     sendButton.onmousedown = function () {
-    //         sendButton.style.backgroundColor = "#999999";
-    //     };
-    //     sendButton.onmouseup = function () {
-    //         sendButton.style.backgroundColor = "#bbbbbb";
-    //         sendChat(undefined, document.getElementById("text").value);
-    //     };
-
-    //     sendButton.ontouchstart = sendButton.onmousedown;
-    //     sendButton.ontouchend = sendButton.onmouseup;
 
     //     window.onkeydown = function (e) {
     //         if (
@@ -118,7 +104,6 @@ const Chat = () => {
     return (
         <>
             <div
-                id="chat"
                 style={{
                     position: "absolute",
                     height: "100vh",
@@ -139,7 +124,26 @@ const Chat = () => {
                     }}
                 >
                     Chat
-                    <ChatCloseButton setChatOpen={setChatOpen} />
+                    <ReactiveDiv
+                        onClick={() => setChatOpen(false)}
+                        style={{
+                            position: "absolute",
+                            width: "max(40px, 2em)",
+                            height: "max(40px, 2em)",
+                            right: 0,
+                            top: 0,
+                            backgroundColor: "#ff000077",
+                            textAlign: "center",
+                            lineHeight: "max(40px, 2em)",
+                            userSelect: "none",
+                        }}
+                        reactiveStyle={{
+                            hover: { backgroundColor: "#bb000077" },
+                            press: { backgroundColor: "#99000077" },
+                        }}
+                    >
+                        X
+                    </ReactiveDiv>
                 </div>
                 <div
                     id="chatBox"
@@ -188,8 +192,8 @@ const Chat = () => {
                         }}
                         placeholder="Type a message"
                     />
-                    <div
-                        onClick={() => {}}
+                    <ReactiveDiv
+                        onClick={sendChat}
                         style={{
                             position: "absolute",
                             width: "max(30px, 1.5em)",
@@ -203,16 +207,24 @@ const Chat = () => {
                             textAlign: "center",
                             userSelect: "none",
                         }}
+                        reactiveStyle={{
+                            hover: { backgroundColor: "#bbbbbb" },
+                            press: { backgroundColor: "#999999" },
+                        }}
                     >
                         &gt;
-                    </div>
+                    </ReactiveDiv>
                 </div>
             </div>
             <ChatOpenButton
-                setChatOpen={(open) => {
-                    setChatOpen(open);
-                    if (open) chatTextRef.current.focus();
-                    else chatTextRef.current.blur();
+                onClick={() => {
+                    if (chatOpen) {
+                        setChatOpen(false);
+                        chatTextRef.current.blur();
+                    } else {
+                        setChatOpen(true);
+                        chatTextRef.current.focus();
+                    }
                 }}
             />
         </>
@@ -239,11 +251,6 @@ export default Chat;
  *
  *
  */
-
-// $(document).ready(function () {
-//     handleButtons();
-//     receiveChats();
-// });
 
 // let hasNewPage = false;
 

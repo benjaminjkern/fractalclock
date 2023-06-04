@@ -31,3 +31,20 @@ export const useMouseHover = (stopPropagation = true) => {
         },
     };
 };
+
+export const useMousePress = (stopPropagation = true) => {
+    const [press, setPress] = useState(false);
+    return {
+        press,
+        pressElementProps: {
+            onMouseDown: (e) => {
+                if (stopPropagation) e.stopPropagation();
+                setPress(true);
+            },
+            onMouseUp: (e) => {
+                if (stopPropagation) e.stopPropagation();
+                setPress(false);
+            },
+        },
+    };
+};

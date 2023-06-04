@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-
-import { useMouseHover, useMousePress } from "../utils/hooks";
+import { ReactiveDiv } from "../utils/components";
 
 const WAIT = 1000;
 
-const ChatOpenButton = ({ chatOpen, setChatOpen }) => {
-    const { hover, hoverElementProps } = useMouseHover();
-    const { press, pressElementProps } = useMousePress();
-
+const ChatOpenButton = ({ chatOpen, onClick }) => {
     const [visible, setVisible] = useState(true);
 
     useEffect(() => {
@@ -49,10 +45,8 @@ const ChatOpenButton = ({ chatOpen, setChatOpen }) => {
     const phoneScreen = false;
 
     return (
-        <div
-            onClick={() => setChatOpen((currChatOpen) => !currChatOpen)}
-            {...hoverElementProps}
-            {...pressElementProps}
+        <ReactiveDiv
+            onClick={onClick}
             style={{
                 position: "absolute",
                 width: "max(20px, 1em)",
@@ -60,19 +54,19 @@ const ChatOpenButton = ({ chatOpen, setChatOpen }) => {
                 opacity: visible,
                 right: chatOpen ? (phoneScreen ? "100%" : "20%") : 0,
                 top: "calc(50% - max(20px, 1em))",
-                backgroundColor: press
-                    ? "#00000099"
-                    : hover
-                    ? "#00000066"
-                    : "#00000033",
+                backgroundColor: "#00000033",
                 borderRadius: "max(10px, 0.5em) 0 0 max(10px, 0.5em)",
                 textAlign: "center",
                 lineHeight: "max(40px, 2em)",
                 userSelect: "none",
             }}
+            reactiveStyle={{
+                hover: { backgroundColor: "#00000066" },
+                press: { backgroundColor: "#00000099" },
+            }}
         >
             {chatOpen ? "&gt;" : "&lt;"}
-        </div>
+        </ReactiveDiv>
     );
 };
 

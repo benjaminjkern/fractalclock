@@ -1,9 +1,13 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { matMult, rotationMatrix, vecAdd } from "./utils/mathUtils";
+import {
+    HSVtoHEX,
+    matMult,
+    rotationMatrix,
+    scaleToHex,
+    vecAdd,
+} from "./utils/mathUtils";
 import { useWindowSize } from "./utils/hooks";
 import { FractalSettingsContext } from "./FractalSettings";
-
-const FPS = 60;
 
 const FractalCanvas = () => {
     const { windowWidth, windowHeight } = useWindowSize();
@@ -31,12 +35,11 @@ const FractalCanvas = () => {
                 now.getHours() * 60 * 60;
 
             // Background color
-            // canvasContext.fillStyle = `${HSVToHex((180 * seconds) / 60 / 60, 100, 70)}${Math.floor(blurAmount*256).toString(16)}`
-            canvasContext.fillStyle = `#ff0000${Math.floor(
-                (1 - blurAmount) * 255
-            )
-                .toString(16)
-                .padStart(2, "0")}`;
+            canvasContext.fillStyle = `#${HSVtoHEX(
+                seconds / 60 / 60,
+                1,
+                0.8
+            )}${scaleToHex(1 - blurAmount)}`;
             canvasContext.fillRect(0, 0, windowWidth, windowHeight);
 
             const smallerSide = Math.min(windowWidth, windowHeight);
@@ -103,18 +106,22 @@ const FractalCanvas = () => {
             canvasContext.stroke();
 
             // Glow
-            canvasContext.lineWidth = glowAmount * 100;
-            canvasContext.strokeStyle = "#ffffff01";
-            canvasContext.beginPath();
-            for (const branch of tips) {
-                canvasContext.moveTo(...branch.start);
-                canvasContext.lineTo(...branch.end);
-            }
-            canvasContext.stroke();
+            // canvasContext.lineWidth = glowAmount * 100;
+            // canvasContext.strokeStyle = "#ffffff";
+            // canvasContext.beginPath();
+            // for (const branch of tips) {
+            //     canvasContext.moveTo(...branch.start);
+            //     canvasContext.lineTo(...branch.end);
+            // }
+            // canvasContext.stroke();
 
             // Tips
             canvasContext.lineWidth = 1;
-            canvasContext.strokeStyle = `#00ffff`;
+            canvasContext.strokeStyle = `#${HSVtoHEX(
+                seconds / 60 / 60 + 0.5,
+                1,
+                0.8
+            )}`;
             canvasContext.beginPath();
             for (const branch of tips) {
                 canvasContext.moveTo(...branch.start);
@@ -123,7 +130,7 @@ const FractalCanvas = () => {
             canvasContext.stroke();
         };
         draw();
-        const drawLoop = setInterval(draw, 1000 / FPS);
+        const drawLoop = setInterval(draw, 1);
         return () => clearInterval(drawLoop);
     }, [settings, windowHeight, windowWidth]);
 

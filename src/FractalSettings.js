@@ -3,7 +3,7 @@ import React, { createContext, useState } from "react";
 export const FractalSettingsContext = createContext();
 
 export const CONTROLS = [
-    { name: "Iterations", min: 1, max: 18, defaultValue: 8, key: "maxDepth" },
+    { name: "Iterations", min: 1, max: 18, defaultValue: 11, key: "maxDepth" },
     {
         name: "Blur",
         min: 0,
@@ -51,7 +51,7 @@ export const CONTROLS = [
         name: "Scale",
         min: 50,
         max: 1000,
-        defaultValue: 125,
+        defaultValue: 100,
         key: "scale",
         getValue: (value) => value / 100,
     },

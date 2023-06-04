@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
 import {
-    HSVtoHEX,
     getNowSeconds,
     matMult,
     rotationMatrix,

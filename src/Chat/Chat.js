@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
-import { findAll } from "./utils/stringUtils";
-import ChatOpenButton from "./Chat/ChatOpenButton";
-import ChatCloseButton from "./ChatCloseButton";
+import Panel from "./Panel";
+import { useWindowSize } from "../utils/hooks";
+import { findAll } from "../utils/stringUtils";
 import { ReactiveDiv } from "../utils/components";
 
 const ANONYMOUS = `<span style="color:darkgray"> (Anonymous) </span>`;
@@ -48,7 +48,6 @@ const replaceSpecials = (message) => {
 
 const Chat = () => {
     const [chats, setChats] = useState([]);
-    const [chatOpen, setChatOpen] = useState(false);
     /*
     .message {
         width: calc(100% - 20px);
@@ -59,21 +58,12 @@ const Chat = () => {
     }
     */
 
-    const sendChat = () => {};
-
-    // const handleButtons = () => {
-
-    //     const sendButton = document.getElementById("send");
+    const sendChat = () => {
+        console.log(chatTextRef.current.value);
+        chatTextRef.current.value = "";
+    };
 
     //     window.onkeydown = function (e) {
-    //         if (
-    //             e.key === "Enter" &&
-    //             window.chatOpen &&
-    //             document.getElementById("text") == document.activeElement
-    //         ) {
-    //             sendChat(undefined, document.getElementById("text").value);
-    //             sendButton.style.backgroundColor = "#999999";
-    //         }
     //         if (
     //             e.key === "ArrowLeft" &&
     //             window.chatOpen &&
@@ -92,142 +82,94 @@ const Chat = () => {
     //         }
     //     };
 
-    //     window.onkeyup = function (e) {
-    //         if (e.key === "Enter") {
-    //             sendButton.style.backgroundColor = "#ffffff";
-    //         }
-    //     };
-
-    // };
-
     const chatTextRef = useRef();
+    const [enterKeyDown, setEnterKeyDown] = useState(false);
     return (
-        <>
+        <Panel
+            panelTitle="Chat"
+            onToggleOpen={(panelOpen) => {
+                if (panelOpen) chatTextRef.current.focus();
+                else chatTextRef.current.blur();
+            }}
+        >
             <div
                 style={{
-                    position: "absolute",
-                    height: "100vh",
-                    width: "20%",
-                    right: 0,
-                    backgroundColor: "#00000033",
-                    opacity: 0,
+                    overflowY: "scroll",
+                    overflowX: "hidden",
+                    margin: 10,
+                    marginBottom: 0,
+                    flex: 1,
                 }}
             >
                 <div
                     style={{
-                        position: "absolute",
-                        width: "100%",
-                        height: "max(40px, 2em)",
-                        backgroundColor: "#00000033",
+                        color: "darkgrey",
                         textAlign: "center",
-                        lineHeight: "max(40px, 2em)",
+                        justifyContent: "center",
                     }}
                 >
-                    Chat
-                    <ReactiveDiv
-                        onClick={() => setChatOpen(false)}
-                        style={{
-                            position: "absolute",
-                            width: "max(40px, 2em)",
-                            height: "max(40px, 2em)",
-                            right: 0,
-                            top: 0,
-                            backgroundColor: "#ff000077",
-                            textAlign: "center",
-                            lineHeight: "max(40px, 2em)",
-                            userSelect: "none",
-                        }}
-                        reactiveStyle={{
-                            hover: { backgroundColor: "#bb000077" },
-                            press: { backgroundColor: "#99000077" },
-                        }}
-                    >
-                        X
-                    </ReactiveDiv>
-                </div>
-                <div
-                    id="chatBox"
-                    style={{
-                        overflowY: "scroll",
-                        overflowX: "hidden",
-                        height: "calc(100% - max(110px, 5.5em))",
-                        width: "calc(100% - max(20px, 1em))",
-                        position: "absolute",
-                        top: "max(50px, 2.5em)",
-                        left: "max(10px, 0.5em)",
-                    }}
-                >
-                    <div
-                        style={{
-                            color: "darkgrey",
-                            lineHeight: "calc(100vh - max(120px, 6em))",
-                            textAlign: "center",
-                        }}
-                    >
-                        There are no chats!
-                    </div>
-                </div>
-                <div
-                    style={{
-                        position: "absolute",
-                        width: "calc(100% - max(20px, 1em))",
-                        height: "max(40px, 2em)",
-                        bottom: "max(10px, 0.5em)",
-                        left: "max(10px,0.5em)",
-                        backgroundColor: "#00000033",
-                        borderRadius: "max(20px, 1em)",
-                    }}
-                >
-                    <input
-                        style={{
-                            border: "none",
-                            height: "max(30px, 1.5em)",
-                            fontSize: "1em",
-                            outline: "none",
-                            backgroundColor: "#00000000",
-                            marginTop: "max(5px, 0.25em)",
-                            marginLeft: "max(10px, 0.5em)",
-                            width: "calc(100% - max(50px, 2.5em))",
-                            color: "white",
-                        }}
-                        placeholder="Type a message"
-                    />
-                    <ReactiveDiv
-                        onClick={sendChat}
-                        style={{
-                            position: "absolute",
-                            width: "max(30px, 1.5em)",
-                            height: "max(30px, 1.5em)",
-                            right: "max(5px, 0.25em)",
-                            top: "max(5px, 0.25em)",
-                            borderRadius: "max(15px, 0.75em)",
-                            backgroundColor: "#fff",
-                            color: "#000",
-                            lineHeight: "max(30px, 1.5em)",
-                            textAlign: "center",
-                            userSelect: "none",
-                        }}
-                        reactiveStyle={{
-                            hover: { backgroundColor: "#bbbbbb" },
-                            press: { backgroundColor: "#999999" },
-                        }}
-                    >
-                        &gt;
-                    </ReactiveDiv>
+                    {Array(100)
+                        .fill()
+                        .map(() => (
+                            <span>There are no chats!</span>
+                        ))}
                 </div>
             </div>
-            <ChatOpenButton
-                onClick={() => {
-                    if (chatOpen) {
-                        setChatOpen(false);
-                        chatTextRef.current.blur();
-                    } else {
-                        setChatOpen(true);
-                        chatTextRef.current.focus();
-                    }
+            <div
+                style={{
+                    height: 40,
+                    margin: 10,
+                    backgroundColor: "#00000033",
+                    borderRadius: 20,
+                    flexDirection: "row",
+                    justifyContent: "center",
                 }}
-            />
-        </>
+            >
+                <input
+                    style={{
+                        border: "none",
+                        height: 30,
+                        width: 0,
+                        outline: "none",
+                        backgroundColor: "#00000000",
+                        margin: "5px 10px",
+                        flex: 1,
+                        color: "white",
+                    }}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            setEnterKeyDown(true);
+                            sendChat();
+                        }
+                    }}
+                    onKeyUp={(e) => {
+                        if (e.key === "Enter") setEnterKeyDown(false);
+                    }}
+                    ref={chatTextRef}
+                    placeholder="Type a message"
+                />
+                <ReactiveDiv
+                    onClick={sendChat}
+                    style={{
+                        width: 30,
+                        height: 30,
+                        margin: 5,
+                        borderRadius: 15,
+                        backgroundColor: enterKeyDown ? "#999999" : "#fff",
+                        color: "#000",
+                        textAlign: "center",
+                        justifyContent: "center",
+                        userSelect: "none",
+                    }}
+                    reactiveStyle={{
+                        hover: { backgroundColor: "#bbbbbb" },
+                        press: { backgroundColor: "#999999" },
+                    }}
+                >
+                    &gt;
+                </ReactiveDiv>
+            </div>
+        </Panel>
     );
 };
 

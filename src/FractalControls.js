@@ -7,7 +7,7 @@ const FractalControls = () => {
         FractalSettingsContext
     );
     const { hover: showingControls, hoverElementProps } = useMouseHover();
-    const { width: windowWidth, height: windowHeight } = useWindowSize();
+    const { windowWidth, windowHeight } = useWindowSize();
 
     const getSettingsValue = ({ key, listKey, listIndex }) => {
         if (key) return settingsInputValues[key];

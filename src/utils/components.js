@@ -9,11 +9,11 @@ export const ReactiveDiv = ({ reactiveStyle, style, ...props }) => {
             {...hoverElementProps}
             {...pressElementProps}
             {...props}
-            style={[
-                style,
-                hover && reactiveStyle.hover,
-                press && reactiveStyle.press,
-            ]}
+            style={{
+                ...style,
+                ...(hover ? reactiveStyle.hover : null),
+                ...(press ? reactiveStyle.press : null),
+            }}
         />
     );
 };

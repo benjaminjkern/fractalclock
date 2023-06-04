@@ -4,9 +4,7 @@ import { useWindowSize } from "./utils/hooks";
 import { FractalSettingsContext } from "./FractalSettings";
 
 const FractalCanvas = () => {
-    const { width: windowWidth, height: windowHeight } = useWindowSize();
-    window.phoneScreen = windowHeight > windowWidth;
-    document.body.style.fontSize = window.phoneScreen ? "24px" : "12px";
+    const { windowWidth, windowHeight } = useWindowSize();
 
     const canvasRef = useRef();
 
@@ -123,14 +121,14 @@ const FractalCanvas = () => {
             canvasContext.stroke();
         };
         draw();
-        const drawLoop = setInterval(draw, 50);
+        const drawLoop = setInterval(draw, 1);
         return () => clearInterval(drawLoop);
     }, [settings, windowHeight, windowWidth]);
 
     return (
         <canvas
             ref={canvasRef}
-            style={{ padding: 0 }}
+            style={{ padding: 0, zIndex: -1 }}
             width={windowWidth}
             height={windowHeight}
         />

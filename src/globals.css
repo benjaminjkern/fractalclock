@@ -8,3 +8,14 @@ body {
 ::placeholder {
     color: darkgrey;
 }
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+div {
+    display: flex;
+    flex-direction: column;
+}

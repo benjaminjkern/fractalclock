@@ -1,0 +1,21 @@
+body {
+    margin: 0px;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+}
+
+::placeholder {
+    color: darkgrey;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+div {
+    display: flex;
+    flex-direction: column;
+}

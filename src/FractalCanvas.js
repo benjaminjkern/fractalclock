@@ -3,6 +3,8 @@ import { matMult, rotationMatrix, vecAdd } from "./utils/mathUtils";
 import { useWindowSize } from "./utils/hooks";
 import { FractalSettingsContext } from "./FractalSettings";
 
+const FPS = 60;
+
 const FractalCanvas = () => {
     const { windowWidth, windowHeight } = useWindowSize();
 
@@ -121,7 +123,7 @@ const FractalCanvas = () => {
             canvasContext.stroke();
         };
         draw();
-        const drawLoop = setInterval(draw, 1);
+        const drawLoop = setInterval(draw, 1000 / FPS);
         return () => clearInterval(drawLoop);
     }, [settings, windowHeight, windowWidth]);
 

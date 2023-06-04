@@ -6,9 +6,9 @@ const Panel = ({ children, panelTitle, onToggleOpen }) => {
     const [panelOpen, setPanelOpen] = useState(false);
 
     const { windowWidth, windowHeight } = useWindowSize();
-    const isMobile = false; //useMobile();
+    const isMobile = windowWidth < windowHeight;
 
-    const panelWidth = windowWidth / 5;
+    const panelWidth = isMobile ? windowWidth : windowWidth / 4;
 
     return (
         <>

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Panel from "./Panel";
 import { ReactiveDiv } from "../utils/components";
 import { replaceSpecials } from "./ChatSpecials";
+import { useWindowSize } from "../utils/hooks";
 
 const API_URL = "https://4r52fybt27.execute-api.us-east-1.amazonaws.com/dev/";
 const MAX_CHAT_LENGTH = 140;
@@ -9,6 +10,8 @@ const MAX_USER_LENGTH = 20;
 
 const Chat = () => {
     const [chats, setChats] = useState();
+    const { windowWidth, windowHeight } = useWindowSize();
+    const isMobile = windowWidth < windowHeight;
 
     useEffect(() => {
         fetch(`${API_URL}?page=${1}`)
@@ -88,7 +91,7 @@ const Chat = () => {
             panelTitle="Chat"
             onToggleOpen={(panelOpen) => {
                 if (panelOpen) {
-                    chatTextRef.current.focus();
+                    if (!isMobile) chatTextRef.current.focus();
                     scrollChatToBottom();
                 } else chatTextRef.current.blur();
             }}

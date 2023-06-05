@@ -38,10 +38,12 @@ app.post("/", async (req, res) => {
 });
 
 app.get("/", async (req, res) => {
-    let page = req.query.page || 1;
-    const chats = (await databaseCalls.allChats()).sort(
-        (a, b) => a.time - b.time
-    );
+    let page = +req.query.page || 1;
+    let since = +req.query.since;
+    let chats = await databaseCalls.allChats();
+    if (since) chats = chats.filter((chat) => chat.time >= since);
+
+    chats.sort((a, b) => a.time - b.time);
 
     page = Math.min(page, Math.ceil(chats.length / PAGESIZE));
     res.send({
@@ -53,9 +55,9 @@ app.get("/", async (req, res) => {
     });
 });
 
-// const port = 8192;
-// app.listen(port, () => {
-//     console.log("Server listening on port: " + port);
-// });
+const port = 8192;
+app.listen(port, () => {
+    console.log("Server listening on port: " + port);
+});
 
 module.exports.handler = serverless(app);

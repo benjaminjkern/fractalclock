@@ -10,21 +10,44 @@ const MAX_USER_LENGTH = 20;
 
 const Chat = () => {
     const [chats, setChats] = useState();
+    const [lastRequestSent, setLastRequestSent] = useState();
     const { windowWidth, windowHeight } = useWindowSize();
     const isMobile = windowWidth < windowHeight;
 
     useEffect(() => {
-        fetch(`${API_URL}?page=${1}`)
-            .then((response) => response.json())
-            .then((data) => {
-                setChats(data.chats);
-                console.log("page number", data.page);
-            })
-            .catch((err) => {
-                console.error(err);
-                setChats([]);
-            });
-    }, []);
+        const now = new Date().getTime();
+        const fetchChats = () => {
+            fetch(
+                `${API_URL}${
+                    lastRequestSent ? `?since=${lastRequestSent}` : ""
+                }`
+            )
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data.chats.length);
+                    if (lastRequestSent) {
+                        if (chats.length > 0)
+                            setChats((currentChats) => [
+                                ...currentChats,
+                                ...data.chats,
+                            ]);
+                    } else {
+                        setChats(data.chats);
+                    }
+
+                    setLastRequestSent(now);
+                })
+                .catch((err) => {
+                    console.error(err);
+                    setChats([]);
+                });
+        };
+        if (!lastRequestSent) fetchChats();
+        else {
+            const interval = setTimeout(fetchChats, 5000);
+            return () => clearTimeout(interval);
+        }
+    }, [lastRequestSent]);
 
     let user = undefined;
 
@@ -59,7 +82,8 @@ const Chat = () => {
 
     const scrollChatToBottom = () => {
         if (scrollRef.current)
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+            scrollRef.current.scrollTop =
+                scrollRef.current.scrollHeight + scrollRef.current.style.height;
     };
 
     //     window.onkeydown = function (e) {

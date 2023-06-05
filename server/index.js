@@ -14,45 +14,46 @@ app.use((req, res, next) => {
     next();
 });
 
-const proper = /^[^<]+$/;
 const PAGESIZE = 100;
-const MAXCHATLENGTH = 140;
-const MAXUSERLENGTH = 20;
-
-let chats = [];
+const MAX_CHAT_LENGTH = 140;
+const MAX_USER_LENGTH = 20;
 
 app.post("/", async (req, res) => {
-    if (
-        proper.test(req.body.msg) &&
-        proper.test(req.body.user) &&
-        req.body.msg.length < MAXCHATLENGTH &&
-        (!req.body.user || req.body.user.length < MAXUSERLENGTH)
-    ) {
-        const chat = {
-            time: new Date().getTime(),
-            user: req.body.user,
-            msg: req.body.msg,
-        };
-        // console.log(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
-        console.log(chat);
-        databaseCalls.addChat(chat);
-    }
+    if (req.body.msg.length >= MAX_CHAT_LENGTH)
+        return res
+            .status(400)
+            .send(`Messages must be less than ${MAX_CHAT_LENGTH} characters!`);
+    if (req.body.user && req.body.user.length >= MAXUSERLENGTH)
+        return res
+            .status(400)
+            .send(`User name must be less than ${MAX_CHAT_LENGTH} characters!`);
+
+    const chat = {
+        time: new Date().getTime(),
+        user: req.body.user,
+        msg: req.body.msg,
+    };
+    databaseCalls.addChat(chat);
+    res.send("Sent message!");
 });
 
 app.get("/", async (req, res) => {
-    const page = req.query.page || 1;
-    res.send({
-        chats:
-            chats.length >= page * PAGESIZE
-                ? chats.slice(chats.length - page * PAGESIZE)
-                : chats,
-        page: Math.min(page, Math.ceil(chats.length / PAGESIZE)),
-    });
+    let page = req.query.page || 1;
+    const chats = (await databaseCalls.allChats()).sort(
+        (a, b) => a.time - b.time
+    );
 
-    chats = (await databaseCalls.allChats()).sort((a, b) => a.time - b.time);
+    page = Math.min(page, Math.ceil(chats.length / PAGESIZE));
+    res.send({
+        chats: chats.slice(
+            Math.max(0, chats.length - page * PAGESIZE),
+            Math.max(0, chats.length - (page - 1) * PAGESIZE)
+        ),
+        page,
+    });
 });
 
-// const port = 8192
+// const port = 8192;
 // app.listen(port, () => {
 //     console.log("Server listening on port: " + port);
 // });

@@ -47,13 +47,13 @@ const Chat = () => {
 
         fetch(API_URL, {
             method: "POST",
+            mode: "no-cors",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(newChat),
         });
         setChats((chats) => [...chats, newChat]);
-        scrollChatToBottom();
 
         chatTextRef.current.value = "";
     };
@@ -85,6 +85,10 @@ const Chat = () => {
     const chatTextRef = useRef();
     const scrollRef = useRef();
     const [enterKeyDown, setEnterKeyDown] = useState(false);
+
+    useEffect(() => {
+        scrollChatToBottom();
+    }, [chats]);
 
     return (
         <Panel

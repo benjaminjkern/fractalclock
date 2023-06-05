@@ -94,6 +94,7 @@ const FractalControls = () => {
                                 borderRadius: 2 * radius,
                                 height: 2 * radius,
                                 width: width,
+                                marginLeft: 10,
                                 outline: "none",
                                 WebkitAppearance: "none",
                                 appearance: "none",

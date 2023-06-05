@@ -15,14 +15,14 @@ export const CONTROLS = [
         key: "blurAmount",
         getValue: (value) => value / 255,
     },
-    {
-        name: "Glow",
-        min: 0,
-        max: 100,
-        defaultValue: 20,
-        key: "glowAmount",
-        getValue: (value) => value / 100,
-    },
+    // {
+    //     name: "Glow",
+    //     min: 0,
+    //     max: 100,
+    //     defaultValue: 20,
+    //     key: "glowAmount",
+    //     getValue: (value) => value / 100,
+    // },
     {
         name: "Second Hand",
         min: 0,

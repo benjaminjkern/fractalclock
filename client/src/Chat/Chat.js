@@ -4,9 +4,12 @@ import { ReactiveDiv } from "../utils/components";
 import { replaceSpecials } from "./ChatSpecials";
 import { useWindowSize } from "../utils/hooks";
 
-const API_URL = "https://4r52fybt27.execute-api.us-east-1.amazonaws.com/dev/";
+// const API_URL = "https://4r52fybt27.execute-api.us-east-1.amazonaws.com/dev/";
+const API_URL = "http://localhost:8192/";
 const MAX_CHAT_LENGTH = 140;
 const MAX_USER_LENGTH = 20;
+
+const CLIENT_ID = Math.random().toString(16).substring(2);
 
 const Chat = () => {
     const [chats, setChats] = useState();
@@ -15,8 +18,8 @@ const Chat = () => {
     const isMobile = windowWidth < windowHeight;
 
     useEffect(() => {
-        const now = new Date().getTime();
         const fetchChats = () => {
+            const now = new Date().getTime();
             fetch(
                 `${API_URL}${
                     lastRequestSent ? `?since=${lastRequestSent}` : ""
@@ -24,12 +27,15 @@ const Chat = () => {
             )
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(data.chats.length);
                     if (lastRequestSent) {
+                        if (data.chats.length > 0)
+                            console.log(data.chats.length);
                         if (chats.length > 0)
                             setChats((currentChats) => [
                                 ...currentChats,
-                                ...data.chats,
+                                ...data.chats.filter(
+                                    ({ clientId }) => clientId !== CLIENT_ID
+                                ),
                             ]);
                     } else {
                         setChats(data.chats);
@@ -44,7 +50,7 @@ const Chat = () => {
         };
         if (!lastRequestSent) fetchChats();
         else {
-            const interval = setTimeout(fetchChats, 5000);
+            const interval = setTimeout(fetchChats, 1000);
             return () => clearTimeout(interval);
         }
     }, [lastRequestSent]);
@@ -67,6 +73,7 @@ const Chat = () => {
         const newChat = {};
         if (user) newChat.user = user;
         newChat.msg = message;
+        newChat.clientId = CLIENT_ID;
 
         fetch(API_URL, {
             method: "POST",
@@ -75,7 +82,7 @@ const Chat = () => {
             },
             body: JSON.stringify(newChat),
         });
-        setChats((chats) => [...chats, newChat]);
+        setChats((currentChats) => [...currentChats, newChat]);
 
         chatTextRef.current.value = "";
     };

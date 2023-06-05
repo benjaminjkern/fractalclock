@@ -21,27 +21,11 @@ const SPECIALS = {
             alt="Love"
         />
     ),
-    ":dylan:": (
-        <ChatImage
-            src="https://resizing.flixster.com/Gc8BERNydw7dUYBPSG0-BFNk5SA=/506x652/v2/https://flxt.tmsimg.com/v9/AllPhotos/166890/166890_v9_bb.jpg"
-            alt="Dylan"
-        />
-    ),
     crowdventure: <a href="https://crowdventure.me/">crowdventure</a>,
-    josh: <span style={{ color: "red" }}>chad</span>,
-    ben: <span style={{ color: "red" }}>chad</span>,
-    dom: <span style={{ color: "red" }}>chad</span>,
-    evan: <span style={{ color: "red" }}>chad</span>,
-    soph: <span style={{ color: "red" }}>chad</span>,
-    diego: <span style={{ color: "red" }}>chad</span>,
-    marissa: <span style={{ color: "red" }}>chad</span>,
-    herb: <span style={{ color: "red" }}>chad</span>,
-    andrew: <span style={{ color: "red" }}>chad</span>,
-    wally: (
-        <span style={{ color: "blue", textShadow: "5px 5px white" }}>thad</span>
-    ),
     nigger: "******",
     faggot: "******",
+    fag: "***",
+    cunt: "****",
 };
 export const replaceSpecials = (message) => {
     const replaceSet = {};

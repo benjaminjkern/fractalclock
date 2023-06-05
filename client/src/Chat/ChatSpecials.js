@@ -4,7 +4,7 @@ const ChatImage = ({ style, alt, ...props }) => (
     <img
         {...props}
         style={{ width: "100%", ...props }}
-        alt={alt || "Fractal Clock Chat"}
+        alt={alt || "fractalclock.com"}
     />
 );
 
@@ -31,15 +31,17 @@ const SPECIALS = {
     marissa: <span style={{ color: "red" }}>chad</span>,
     herb: <span style={{ color: "red" }}>chad</span>,
     andrew: <span style={{ color: "red" }}>chad</span>,
+    wally: (
+        <span style={{ color: "blue", textShadow: "5px 5px white" }}>thad</span>
+    ),
     ":dylan:": (
         <ChatImage
             src="https://resizing.flixster.com/Gc8BERNydw7dUYBPSG0-BFNk5SA=/506x652/v2/https://flxt.tmsimg.com/v9/AllPhotos/166890/166890_v9_bb.jpg"
             alt="Dylan"
         />
     ),
-    wally: (
-        <span style={{ color: "blue", textShadow: "5px 5px white" }}>thad</span>
-    ),
+    nigger: "******",
+    faggot: "******",
 };
 export const replaceSpecials = (message) => {
     const replaceSet = {};

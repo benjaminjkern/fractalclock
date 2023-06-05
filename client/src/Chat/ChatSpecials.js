@@ -3,7 +3,12 @@ import { findAll } from "../utils/stringUtils";
 const ChatImage = ({ style, alt, ...props }) => (
     <img
         {...props}
-        style={{ width: "100%", ...props }}
+        style={{
+            width: "max(100% - 15px)",
+            borderRadius: 5,
+            marginTop: 8,
+            ...props,
+        }}
         alt={alt || "fractalclock.com"}
     />
 );
@@ -21,6 +26,12 @@ const SPECIALS = {
             alt="Love"
         />
     ),
+    ":)": "🙂",
+    "8)": "😎",
+    ":D": "😄",
+    ":')": "🥲",
+    ":(": "🙁",
+    ":'(": "😢",
     crowdventure: <a href="https://crowdventure.me/">crowdventure</a>,
     nigger: "******",
     faggot: "******",

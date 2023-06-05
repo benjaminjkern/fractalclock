@@ -14,6 +14,8 @@ const CLIENT_ID = Math.random().toString(16).substring(2);
 const Chat = () => {
     const [chats, setChats] = useState();
     const [lastRequestSent, setLastRequestSent] = useState();
+    const [shouldBeAtScrolledToBottom, setShouldBeScrolledToBottom] =
+        useState(true);
     const { windowWidth, windowHeight } = useWindowSize();
     const isMobile = windowWidth < windowHeight;
 
@@ -28,15 +30,14 @@ const Chat = () => {
                 .then((response) => response.json())
                 .then((data) => {
                     if (lastRequestSent) {
-                        if (data.chats.length > 0)
-                            console.log(data.chats.length);
-                        if (chats.length > 0)
+                        if (data.chats.length > 0) {
                             setChats((currentChats) => [
                                 ...currentChats,
                                 ...data.chats.filter(
                                     ({ clientId }) => clientId !== CLIENT_ID
                                 ),
                             ]);
+                        }
                     } else {
                         setChats(data.chats);
                     }
@@ -88,37 +89,30 @@ const Chat = () => {
     };
 
     const scrollChatToBottom = () => {
-        if (scrollRef.current)
-            scrollRef.current.scrollTop =
-                scrollRef.current.scrollHeight + scrollRef.current.style.height;
+        if (scrollRef.current && shouldBeAtScrolledToBottom)
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     };
 
-    //     window.onkeydown = function (e) {
-    //         if (
-    //             e.key === "ArrowLeft" &&
-    //             window.chatOpen &&
-    //             document.getElementById("text").selectionStart === 0
-    //         ) {
-    //             setChatState(false);
-    //         }
-    //         if (e.key === "ArrowUp" && window.chatOpen) {
-    //             document.getElementById("text").value = last;
-    //             document.getElementById("text").selectionStart = last.length;
-    //         }
-    //         if (e.key === "ArrowRight" && !window.chatOpen) {
-    //             document.getElementById("text").selectionStart =
-    //                 document.getElementById("text").value.length;
-    //             setChatState(true);
-    //         }
-    //     };
+    useEffect(() => {
+        scrollChatToBottom();
+    }, [chats]);
 
     const chatTextRef = useRef();
     const scrollRef = useRef();
     const [enterKeyDown, setEnterKeyDown] = useState(false);
 
     useEffect(() => {
-        scrollChatToBottom();
-    }, [chats]);
+        if (!scrollRef.current) return;
+        const scrollHandler = (e) => {
+            setShouldBeScrolledToBottom(
+                e.target.scrollTop + e.target.clientHeight >=
+                    e.target.scrollHeight
+            );
+        };
+        const scrollBox = scrollRef.current;
+        scrollBox.addEventListener("scroll", scrollHandler);
+        return () => scrollBox.removeEventListener("scroll", scrollHandler);
+    }, [scrollRef.current]);
 
     return (
         <Panel
@@ -230,6 +224,25 @@ const Chat = () => {
         </Panel>
     );
 };
+
+//     window.onkeydown = function (e) {
+//         if (
+//             e.key === "ArrowLeft" &&
+//             window.chatOpen &&
+//             document.getElementById("text").selectionStart === 0
+//         ) {
+//             setChatState(false);
+//         }
+//         if (e.key === "ArrowUp" && window.chatOpen) {
+//             document.getElementById("text").value = last;
+//             document.getElementById("text").selectionStart = last.length;
+//         }
+//         if (e.key === "ArrowRight" && !window.chatOpen) {
+//             document.getElementById("text").selectionStart =
+//                 document.getElementById("text").value.length;
+//             setChatState(true);
+//         }
+//     };
 
 export default Chat;
 

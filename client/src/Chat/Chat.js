@@ -4,8 +4,8 @@ import { ReactiveDiv } from "../utils/components";
 import { replaceSpecials } from "./ChatSpecials";
 import { useWindowSize } from "../utils/hooks";
 
-// const API_URL = "https://4r52fybt27.execute-api.us-east-1.amazonaws.com/dev/";
-const API_URL = "http://localhost:8192/";
+const API_URL = "https://4r52fybt27.execute-api.us-east-1.amazonaws.com/dev/";
+// const API_URL = "http://localhost:8192/";
 const MAX_CHAT_LENGTH = 140;
 const MAX_USER_LENGTH = 20;
 

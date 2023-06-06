@@ -38,14 +38,11 @@ const FractalCanvas = () => {
         const maxLength = Math.max(...branchLengths);
 
         const startLength =
-            scale *
+            (scale * smallerSide) /
+            2 /
             (maxLength === 1
-                ? smallerSide / 2 / maxDepth
-                : Math.min(
-                      smallerSide / 2,
-                      ((smallerSide / 2 / maxLength) * (1 - maxLength)) /
-                          (1 - maxLength ** maxDepth)
-                  ));
+                ? maxLength * maxDepth
+                : (1 - maxLength ** (maxDepth + 1)) / (1 - maxLength) - 1);
 
         const branches = [
             {
@@ -71,6 +68,8 @@ const FractalCanvas = () => {
 
         const tips = [];
 
+        let firstBranch = true;
+
         while (branches.length > 0) {
             const branch = branches.pop();
             const branchEnd = vecAdd(branch.start, branch.vector);
@@ -81,8 +80,10 @@ const FractalCanvas = () => {
                 continue;
             }
 
-            canvasContext.moveTo(...branch.start);
-            canvasContext.lineTo(...branchEnd);
+            if (!firstBranch) {
+                canvasContext.moveTo(...branch.start);
+                canvasContext.lineTo(...branchEnd);
+            } else firstBranch = false;
 
             for (const transformationMatrix of transformationMatrices) {
                 branches.push({

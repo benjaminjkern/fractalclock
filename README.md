@@ -3,7 +3,7 @@
 
 A Fractal Clock. Check it out.
 
-![Drag Racing](Dragster.jpg)
+![Fractal Clock](client/public/favicon.png)
 
 (Not animated but go to [fractalclock.com](https://fractalclock.com) to see it animated)
 

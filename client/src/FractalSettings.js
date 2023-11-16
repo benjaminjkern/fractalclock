@@ -58,6 +58,14 @@ export const CONTROLS = [
         key: "scale",
         getValue: (value) => value / 100,
     },
+    {
+        name: "Constant Colors",
+        min: 0,
+        max: 1,
+        defaultValue: 0,
+        key: "constantColors",
+        getValue: (value) => Math.round(value),
+    },
 ];
 
 // Generate this outside of the function
@@ -100,8 +108,8 @@ const FractalSettingsProvider = ({ children }) => {
 const getNowColors = () => {
     const seconds = getNowSeconds();
     return [
-        `#${HSVtoHEX(seconds / 60 / 60, 1, 0.8)}`,
-        `#${HSVtoHEX(seconds / 60 / 60 + 0.5, 1, 0.8)}`,
+        `#${HSVtoHEX(seconds / 60 / 60, 1, 0.8)}`, // background color
+        `#${HSVtoHEX(seconds / 60 / 60 + 0.5, 1, 0.8)}`, // foreground color
     ];
 };
 
